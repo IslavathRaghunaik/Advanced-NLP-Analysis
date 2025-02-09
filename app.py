@@ -89,7 +89,7 @@ if text_input:
     ])
     
     with tab1:
-        st.subheader("Text Preprocessing")
+        st.subheader("Text Preprocessing.")
         processed_text = preprocess_text(text_input)
         st.write("Original text length:", len(text_input.split()))
         st.write("Processed text length:", len(processed_text.split()))
