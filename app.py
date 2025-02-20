@@ -25,6 +25,14 @@ except:
 sentiment_analyzer = pipeline("sentiment-analysis")
 summarizer = pipeline("summarization")
 
+# Emoji Dictionary
+emoji_dict = {
+    "happy": "😊", "sad": "😢", "angry": "😡", "love": "❤️",
+    "laugh": "😂", "surprise": "😮", "cool": "😎", "sleepy": "😴",
+    "food": "🍔", "coffee": "☕", "money": "💰", "fire": "🔥",
+    "clap": "👏", "star": "⭐", "heart": "💖", "idea": "💡"
+}
+
 def preprocess_text(text):
     # Tokenization
     tokens = word_tokenize(text.lower())
@@ -66,6 +74,11 @@ def analyze_text_structure(text):
         "average_words_per_sentence": round(words/sentences if sentences > 0 else 0, 2)
     }
 
+def convert_text_to_emojis(text):
+    words = text.split()
+    converted_text = " ".join([emoji_dict.get(word.lower(), word) for word in words])
+    return converted_text
+
 # Streamlit UI
 st.set_page_config(page_title="Advanced NLP Analysis Tool", layout="wide")
 
@@ -77,6 +90,7 @@ This tool provides comprehensive natural language processing capabilities includ
 - Text Summarization
 - Named Entity Recognition
 - Text Structure Analysis
+- Text-to-Emojis Conversion 🎭
 """)
 
 # Input text area
@@ -84,8 +98,8 @@ text_input = st.text_area("Enter your text here:", height=200)
 
 if text_input:
     # Create tabs for different analyses
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
-        "Preprocessing", "Sentiment", "Summary", "Entities", "Structure"
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        "Preprocessing", "Sentiment", "Summary", "Entities", "Structure", "Emojis"
     ])
     
     with tab1:
@@ -128,3 +142,9 @@ if text_input:
             st.metric("Words", structure["words"])
         with col3:
             st.metric("Avg Words/Sentence", structure["average_words_per_sentence"])
+    
+    with tab6:
+        st.subheader("Text-to-Emojis Conversion 🎭")
+        emoji_text = convert_text_to_emojis(text_input)
+        st.write("Converted Text with Emojis:")
+        st.write(emoji_text)
